@@ -14,8 +14,8 @@ int main(int argc, const char** argv) {
     cv::Mat img = lane_seg.GetLaneSegmentation(labels);
     cv::Mat vision_lane = lane_seg.GetLaneVison();
     std::vector<std::vector<cv::Point3f>> result;
-    // cv::imshow("vision", vision_lane);
-    // cv::waitKey(0);
+    cv::imshow("vision", vision_lane);
+    cv::waitKey(0);
 
     cv::Mat projective_mat = (cv::Mat_<double>(3,3)<<-2.02430528e-01, +1.18949238e-02,  +2.06928941e+02,
                                                     +2.03825224e-02, -4.31747500e-01,  +5.63260609e+01,
