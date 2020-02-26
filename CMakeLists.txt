@@ -8,7 +8,9 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -std=c11 -fPIE -fPIC -
 find_package(OpenCV  REQUIRED)
 set(CMAKE_MACOSX_RPATH 1)
 #set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/install)
+#set(CMAKE_INSTALL_PREFIX /opt/adc/)
 set(CMAKE_INSTALL_PREFIX /opt/adc/)
+
 add_subdirectory(src/module/driver_area_2Dto3D free_space)
 #for driver area test
 ###############################################

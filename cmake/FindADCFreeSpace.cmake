@@ -1,5 +1,5 @@
 SET(LIBRARY_NAMES free_space)
-FIND_PATH(ADC_FREE_SPACE_INCLUDE driver_area_2Dto3D.h /usr/include /usr/include/adc_free_space /usr/local/include /usr/local/include/adc_free_space /opt/adc/include/free_space)
+FIND_PATH(ADC_FREE_SPACE_INCLUDE driver_area_2Dto3D.h /usr/free_space/  /usr/free_space/include/ /usr/include /usr/include/adc_free_space /usr/local/include /usr/local/include/adc_free_space /opt/adc/include/free_space)
 FIND_LIBRARY(FREE_SPACE_LIBRARY NAMES ${LIBRARY_NAMES}  /usr/lib /usr/lib/adc_free_space /usr/local/lib /usr/local/lib/adc_free_space /opt/adc/lib)
 
 IF(ADC_FREE_SPACE_INCLUDE AND FREE_SPACE_LIBRARY)

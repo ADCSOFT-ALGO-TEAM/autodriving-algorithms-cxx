@@ -8,6 +8,9 @@
 
 #include <opencv2/opencv.hpp>
 #include <vector>
+#ifndef SIMULATION_LANR_SEGMENTATION_H__
+#define SIMULATION_LANR_SEGMENTATION_H__
+
 
 namespace pch
 {
@@ -34,3 +37,4 @@ private:
 
 };
 }
+#endif // DEBUG

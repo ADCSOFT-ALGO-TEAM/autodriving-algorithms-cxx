@@ -17,5 +17,5 @@ set_target_properties (${LIB_NAME} PROPERTIES VERSION 1.0 SOVERSION 1)
 target_link_libraries(${LIB_NAME} ${OpenCV_LIBS})
 
 file(GLOB INCLUDE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../../../include//module/driver_area_2Dto3D/*.h)
-install (TARGETS ${LIB_NAME} DESTINATION lib)
+install (TARGETS ${LIB_NAME} DESTINATION lib/free_space)
 install (FILES ${INCLUDE_FILES} DESTINATION free_space/include )
