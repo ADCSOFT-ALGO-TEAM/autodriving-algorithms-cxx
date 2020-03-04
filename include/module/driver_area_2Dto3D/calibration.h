@@ -6,9 +6,12 @@
  *
 */
 #include <vector>
-#include <opencv2/opencv.hpp>
+// #include <opencv2/opencv.hpp>
+#include<opencv4/opencv2/opencv.hpp>
+#include<opencv4/opencv2/calib3d.hpp>
 #include <string>
 
+#define USE_OPENCV4
 
 
 namespace pch
@@ -22,11 +25,12 @@ public:
     CalibrationExter(const std::string &images_on_ground_path, const std::string &images_path, const cv::Size2i &board_size, const cv::Size2d &grid_size);
     void GetCameraMatrix(cv::Mat &camera_matrix, cv::Mat &dist_coeffs);
     void GetCameraMatrixAndPlaneFactor(cv::Mat &camera_matrix, cv::Mat &dist_coeffs, std::vector<float> &plane);
+    static void OnMouseCallback(int event, int x, int y, int flag, void* param);
 private:
     void FitGround(const std::vector<cv::Point3f> &ground_pts, cv::Mat &gound, bool &success);
     void FindChessboardCorners();
     void ConverBoardCornerFrom2DTo3D();
-    void BackProjection(const cv::Mat &camera_matrix, const cv::Mat &dist_coeff, std::vector<cv::Point3f> point3D);
+    void BackProjection(const cv::Mat &camera_matrix, const cv::Mat &dist_coeff, std::vector<cv::Point3f> &point3D);
     void CalibrationError(const cv::Mat &camera_matrix, const cv::Mat &dist_coeffs, const std::vector<cv::Mat> &rvecs, const std::vector<cv::Mat> &tvecs, double &cumulative_error, double &avg_error);
     
 

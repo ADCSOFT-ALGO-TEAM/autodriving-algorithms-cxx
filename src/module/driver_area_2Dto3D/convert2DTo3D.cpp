@@ -96,11 +96,12 @@ namespace pch
     {
         // (void) image_point;
         // (void) point_3D;
-        cv::Mat point;
-        cv::Mat point_3d;
+	point_3D.clear();
         if(use_projective_)
         {
             bool change = false;
+	    cv::Mat point_3d;
+	    cv::Mat point;
             std::vector<int> point_t;
             CheckImagePoints(image_point, point_t, change);
             if(change)
@@ -128,13 +129,17 @@ namespace pch
             float y_3d = (image_point[1] - v0_) / fv_;
             double temp = 1 - a0_ * x_3d - a1_ * y_3d;
             double t  = a2_ / temp -1;
-            point_3D.emplace_back((1 + t) * x_3d);
-            point_3D.emplace_back((1 + t) * y_3d);
-            point_3D.emplace_back((1 + t));
-            std::cout<<"2D x: "<<image_point[0]<<" y: "<<image_point[1]<<std::endl<<" 3d: x: "<<(1 + t) * x_3d<<
-            " Y: "<<(1 + t) * y_3d<<" Z: "<<(1 + t)<<std::endl<<" x_3d: "<<x_3d<<" y_3d: "<<y_3d<<std::endl;
+	    double x = (1+t) * x_3d;
+	    double y = (1+t) * y_3d;
+	    double z = (1+t);
+            point_3D.emplace_back(x);
+            point_3D.emplace_back(y);
+            point_3D.emplace_back(z);
+        //    std::cout<<"2D x: "<<image_point[0]<<" y: "<<image_point[1]<<std::endl<<" 3d: x: "<<(1 + t) * x_3d<<
+        //    " Y: "<<(1 + t) * y_3d<<" Z: "<<(1 + t)<<std::endl<<" x_3d: "<<x_3d<<" y_3d: "<<y_3d<<std::endl;
         }
-        
+
+	//std::cout<<"3D Point: x "<<point_3D[0]<<" y "<<point_3D[1]<<" z "<<point_3D[2]<<std::endl;
         
 
     }

@@ -12,7 +12,7 @@
 void help()
 {
      std::cout<<"use page: "<<std::endl<<
-        "   please use this program: ./calibration_driver_area  --calibration_camera calibration_images_file --calibration_ground calibration_borad_on_ground_file  --board_size 5 5 --grid_size 10 10";
+        "   please use this program: ./calibration_driver_area  --calibration_camera calibration_images_file --calibration_ground calibration_borad_on_ground_file  --board_size 5 5 --grid_size 10 10"<<std::endl;
 }
 
 int main(int argc, const char** argv) {
@@ -35,16 +35,18 @@ int main(int argc, const char** argv) {
     else
     {
         help();
+        std::cout<<"calibration_camera fail"<<std::endl;
         return 0;
     }
     
-    if(0 == strcmp("calibration_ground", argv[3]))
+    if(0 == strcmp("--calibration_ground", argv[3]))
     {
         calibration_ground_images_path_file = std::string(argv[4]);
     }
     else
     {
         help();
+        std::cout<<"calibration_ground fail"<<std::endl;
         return 0;
     }
 
@@ -72,7 +74,8 @@ int main(int argc, const char** argv) {
     
     //create calibration
 
-    pch::CalibrationExter cal(calibration_camera_images_path_file, calibration_ground_images_path_file, cv::Size(board_height, board_width),cv::Size2d(grid_height, grid_width));
+    //pch::CalibrationExter cal(calibration_camera_images_path_file, calibration_ground_images_path_file, cv::Size(board_height, board_width),cv::Size2d(grid_height, grid_width));
+    pch::CalibrationExter cal(calibration_ground_images_path_file, calibration_camera_images_path_file, cv::Size(board_width, board_height),cv::Size2d(grid_height, grid_width));
 
     cv::Mat camera_matrix;
     cv::Mat dist_coeffs;

@@ -27,14 +27,13 @@ int main(int argc, const char** argv) {
 
     convert.DrivingAreaDetection(img, labels, result);
     std::cout<<"RESULT:"<<std::endl;
-    // for(std::vector<cv::Point3f> &pts : result)
-    // {
-    //     for(cv::Point3f pt : pts)
-    //     {
-    //         std::cout<<"("<<pt.x<<" , "<<pt.y<<" , "<<pt.z<<") ";
-    //     }
-    //     std::cout<<std::endl<<std::endl;
-    // }
-    
+    for(std::vector<cv::Point3f> &pts : result)
+    {
+        for(cv::Point3f pt : pts)
+        {
+            std::cout<<"("<<pt.x<<" , "<<pt.y<<" , "<<pt.z<<") ";
+        }
+       std::cout<<std::endl<<std::endl;
+    }
     return 0;
 }
