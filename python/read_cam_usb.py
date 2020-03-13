@@ -39,13 +39,22 @@ def cache_image():
     cap.release()
     cv2.destroyAllWindows()
 def deal_image():
-    path = '/home/pengccheng/Data/work/ADC/autodriving-algorithms-cxx/python/calib'
+    path = '/home/pengccheng/Data/work/ADC/autodriving-algorithms-cxx/DATA/calbration'
     files = os.listdir(path)
     text = open('calibartions.txt', 'w')
     for f in files:
         if os.path.splitext(f)[1] in ['.png', '.jpeg', '.jpg']:
             img_path = os.path.join(path, f)
-            text.write(img_path)
-            text.write('\n')
+            img = cv2.imread(img_path)
+            ret_, corners = cv2.findChessboardCornersSB(img,(7,6),flags=cv2.CALIB_CB_EXHAUSTIVE+cv2.CALIB_CB_ACCURACY)
+            if ret_:
+                cv2.drawChessboardCorners(img,(7,6),corners,True)
+                cv2.imshow('chess',img )
+                cv2.waitKey(10)
+                text.write(img_path)
+                text.write('\n')
+            else:
+                print('can not det')
+            
 if __name__ == '__main__':
     deal_image()

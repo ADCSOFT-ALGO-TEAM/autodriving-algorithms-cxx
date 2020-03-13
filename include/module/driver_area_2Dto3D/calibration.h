@@ -43,7 +43,7 @@ private:
     std::vector< std::vector< cv::Point2f> > all_images_board_corner_on_2D_;
     std::vector <std::vector< cv::Point3f> > all_images_board_corner_on_3D_;
     std::vector <std::vector< cv::Point2f> > all_images_on_ground_board_corner_2D;
-    std::vector <std::vector< cv::Point3f> > all_images_on_ground_board_corner_3D;    
+    std::vector <std::vector< cv::Point3f> > all_images_on_ground_board_corner_3D;
 };
     
 } // namespace pch

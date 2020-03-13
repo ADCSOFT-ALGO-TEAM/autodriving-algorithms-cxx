@@ -6,13 +6,13 @@
  *
 */
 #include "conver2DTo3D.h"
-
+// #define DEBUG
 
 namespace pch
 {
     void ConverImage2DToCamera3D::ExtracFact()
     {
-        //std::cout<<"matrix: "<<camera_matrix_<<std::endl;
+
         if(6 == camera_matrix_.type())
         {
             fu_ = camera_matrix_.at<double>(0,0);
@@ -20,9 +20,9 @@ namespace pch
             fv_ = camera_matrix_.at<double>(1,1);
             v0_ = camera_matrix_.at<double>(1,2);
 
-            a0_ = ground_plane_.at<double>(0,0);
-            a1_ = ground_plane_.at<double>(1,0);
-            a2_ = ground_plane_.at<double>(2,0);
+            a0_ = ground_plane_.at<float>(0,0);
+            a1_ = ground_plane_.at<float>(1,0);
+            a2_ = ground_plane_.at<float>(2,0);
         }
         else
         {
@@ -35,7 +35,7 @@ namespace pch
             a1_ = ground_plane_.at<float>(1,0);
             a2_ = ground_plane_.at<float>(2,0);
         }
-        
+
     }
     ConverImage2DToCamera3D::ConverImage2DToCamera3D(const std::string &calbration_file)
     {
@@ -96,12 +96,12 @@ namespace pch
     {
         // (void) image_point;
         // (void) point_3D;
-	point_3D.clear();
+	    point_3D.clear();
         if(use_projective_)
         {
             bool change = false;
-	    cv::Mat point_3d;
-	    cv::Mat point;
+            cv::Mat point_3d;
+            cv::Mat point;
             std::vector<int> point_t;
             CheckImagePoints(image_point, point_t, change);
             if(change)
@@ -129,14 +129,20 @@ namespace pch
             float y_3d = (image_point[1] - v0_) / fv_;
             double temp = 1 - a0_ * x_3d - a1_ * y_3d;
             double t  = a2_ / temp -1;
-	    double x = (1+t) * x_3d;
-	    double y = (1+t) * y_3d;
-	    double z = (1+t);
+            double x = (1+t) * x_3d;
+            double y = (1+t) * y_3d;
+            double z = (1+t);
             point_3D.emplace_back(x);
             point_3D.emplace_back(y);
             point_3D.emplace_back(z);
-        //    std::cout<<"2D x: "<<image_point[0]<<" y: "<<image_point[1]<<std::endl<<" 3d: x: "<<(1 + t) * x_3d<<
-        //    " Y: "<<(1 + t) * y_3d<<" Z: "<<(1 + t)<<std::endl<<" x_3d: "<<x_3d<<" y_3d: "<<y_3d<<std::endl;
+        //     std::cout<<"temp: "<<temp<<std::endl;
+        // if(image_point[0] <30 )
+        // {
+        //      std::cout<<"u0_: "<<u0_<<std::endl;
+        //     std::cout<<"2D x: "<<image_point[0]<<" y: "<<image_point[1]<<std::endl<<"3d: X: "<<x<<
+        //    " Y: "<<y<<" Z: "<<z<<std::endl<<"x_3d: "<<x_3d<<" y_3d: "<<y_3d<<std::endl<<std::endl<<std::endl;
+        // }
+            
         }
 
 	//std::cout<<"3D Point: x "<<point_3D[0]<<" y "<<point_3D[1]<<" z "<<point_3D[2]<<std::endl;
@@ -149,7 +155,6 @@ namespace pch
         std::vector<double> point_3d_t;
         for(cv::Point pt : image_points)
         {
-
         std::vector<int> point_2d;
         cv::Point3f point_3d;
         point_2d.emplace_back(pt.x);
@@ -243,18 +248,50 @@ namespace pch
             int label = lables[i];
             cv::Mat binary_img;
             std::vector<std::vector<cv::Point>> contous;
+            #ifdef DEBUG
+            std::vector<std::vector<cv::Point>> contous_show;
+            #endif // DEBUG
             cv::compare(undistort_image, label, binary_img, cv::CMP_EQ);
             cv::findContours(binary_img, contous, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
             
-            #ifdef DEBUG
-            cv::drawContours(debug_img,contous , -1, cv::Scalar::all(255));
-            cv::imshow("DEBUG_CONTOUS", debug_img);
-            cv::waitKey(0);
-            #endif // DEBUG
+            // #ifdef DEBUG
+            // cv::drawContours(debug_img,contous , -1, cv::Scalar::all(255));
+            // cv::imshow("DEBUG_CONTOUS", debug_img);
+            // cv::waitKey(0);
+            // #endif // DEBUG
             std::vector<cv::Point3f> area_contous_3d;
             if(0 == contous.size()) continue;
-            Convert(contous[0], area_contous_3d);
-            driving_area_3d.emplace_back(area_contous_3d);
+            ///select contous
+            ///
+            for(size_t i = 0; i < contous.size(); i++)
+            {
+                double contous_area = cv::contourArea(contous[i]);
+                if(contous_area > 99999)
+                {
+                    #ifdef DEBUG
+                    cv::Mat debug_img_ = cv::Mat::ones(segmentation_res.size(), CV_8UC3);
+                    std::cout<<contous_area<<std::endl;
+                    contous_show.clear();
+                    contous_show.emplace_back(contous[i]);
+                    // for(cv::Point pt: contous[i])
+                    // {
+                    //     std::cout<<pt<<std::endl;
+                    // }
+                    cv::drawContours(debug_img_,contous_show , -1, cv::Scalar::all(255));
+                    cv::imshow("DEBUG_CONTOUS", debug_img_);
+                    cv::imshow("seg", undistort_image*255);
+                    cv::waitKey(0);
+                    #endif // DEBUG
+                    Convert(contous[i], area_contous_3d);
+                    driving_area_3d.emplace_back(area_contous_3d);
+                }
+
+            }
+            #ifdef DEBUG
+            // cv::drawContours(debug_img,contous_show , -1, cv::Scalar::all(255));
+            // cv::imshow("DEBUG_CONTOUS", debug_img);
+            // cv::waitKey(0);
+            #endif // DEBUG
         }
     }
 }

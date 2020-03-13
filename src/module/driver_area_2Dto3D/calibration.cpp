@@ -8,7 +8,6 @@
 
 #include "calibration.h"
 #include <fstream>
-
 namespace pch
 {
 void CalibrationExter::OnMouseCallback(int event, int x, int y, int flag, void* param)
@@ -234,7 +233,6 @@ void CalibrationExter::FitGround(const std::vector<cv::Point3f> &ground_pts, cv:
     {
         success = false;
     }
-    
 }
 
 void CalibrationExter::BackProjection(const cv::Mat &camera_matrix, const cv::Mat &dist_coeffs, std::vector<cv::Point3f> &point3Ds)
